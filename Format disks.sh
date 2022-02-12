@@ -41,7 +41,7 @@ echo -ne "
                     Installing Prerequisites
 -------------------------------------------------------------------------
 "
-pacman -S --noconfirm gptfdisk btrfs-progs
+pacman -S --noconfirm gptfdisk
 echo -ne "
 -------------------------------------------------------------------------
                     Formating Disk
@@ -64,19 +64,7 @@ echo -ne "
                     Creating Filesystems
 -------------------------------------------------------------------------
 "
-createsubvolumes () {
-    btrfs subvolume create /mnt/@
-    btrfs subvolume create /mnt/@home
-    btrfs subvolume create /mnt/@var
-    btrfs subvolume create /mnt/@tmp
-    btrfs subvolume create /mnt/@.snapshots
-}
 
-mountallsubvol () {
-    mount -o ${mountoptions},subvol=@home /dev/mapper/ROOT /mnt/home
-    mount -o ${mountoptions},subvol=@tmp /dev/mapper/ROOT /mnt/tmp
-    mount -o ${mountoptions},subvol=@.snapshots /dev/mapper/ROOT /mnt/.snapshots
-    mount -o ${mountoptions},subvol=@var /dev/mapper/ROOT /mnt/var
 }
 
 if [[ "${DISK}" =~ "nvme" ]]; then
@@ -86,3 +74,32 @@ else
     partition2=${DISK}2
     partition3=${DISK}3
 fi
+
+elif [[ "${FS}" == "ext4" ]]; then
+    mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
+    mkfs.ext4 -L ROOT ${partition3}
+    mount -t ext4 ${partition3} /mnt
+elif [[ "${FS}" == "luks" ]]; then
+    mkfs.vfat -F32 -n "EFIBOOT" ${partition2}
+# enter luks password to cryptsetup and format root partition
+    echo -n "${luks_password}" | cryptsetup -y -v luksFormat ${partition3} -
+# open luks container and ROOT will be place holder 
+    echo -n "${luks_password}" | cryptsetup open ${partition3} ROOT -
+# store uuid of encrypted partition for grub
+    echo encryped_partition_uuid=$(blkid -s UUID -o value ${partition3}) >> setup.conf
+fi
+
+
+# mount target
+mkdir /mnt/boot
+mkdir /mnt/boot/efi
+mount -t vfat -L EFIBOOT /mnt/boot/
+
+if ! grep -qs '/mnt' /proc/mounts; then
+    echo "Drive is not mounted can not continue"
+    echo "Rebooting in 3 Seconds ..." && sleep 1
+    echo "Rebooting in 2 Seconds ..." && sleep 1
+    echo "Rebooting in 1 Second ..." && sleep 1
+    reboot now
+fi
+echo -ne "
