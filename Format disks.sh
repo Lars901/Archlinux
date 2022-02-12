@@ -41,7 +41,7 @@ echo -ne "
                     Installing Prerequisites
 -------------------------------------------------------------------------
 "
-pacman -S --noconfirm gptfdisk
+pacman -S --noconfirm gptfdisk btrfs-progs
 echo -ne "
 -------------------------------------------------------------------------
                     Formating Disk
