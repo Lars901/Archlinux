@@ -208,11 +208,18 @@ sudo git clone https://github.com/EliverLara/Nordic.git
 
 #________________________________________________________
 #AppImg
+
+#SOH
 wget https://github.com/HarbourMasters/Shipwright/releases/download/9.0.0/SoH-Blair-Alfa-Linux.zip
 tar -xfv SoH-Sulu-Bravo-Linux-Performance.zip
 wget https://evilgames.eu/texture-packs/files/oot-reloaded-v10.4.2-soh-otr-hd.7z 
 #wget https://evilgames.eu/texture-packs/files/oot-reloaded-v10.4.2-soh-otr-4k.7z
-#___________________________________
+
+#2Ship
+wget https://github.com/HarbourMasters/2ship2harkinian/releases/download/1.1.2/2Ship-Satoko-Charlie-Linux.zip
+wget https://drive.google.com/file/d/1uSkVg7Ra5SVY56Vtf5Du_X1P7PlTfpJh/view
+
+___________________________________
 #Flatpaks
 
 #Flatseal addon
