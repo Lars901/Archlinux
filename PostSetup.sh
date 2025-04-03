@@ -240,7 +240,7 @@ wget https://www.mediafire.com/file/uijj3i3349h8j2j/gba_bios.zip/file
 flatpak install -y flathub org.ryujinx.Ryujinx
 #wget https://drive.google.com/file/d/1i67zoVVm9AAYRgoKIRsPcPNVETLvseIU/view?usp=sharing
 #wget https://drive.google.com/file/d/1HiSTp90tiBFh3ELVbjsX-8SeUkOodxKz/view?usp=sharing
-sudo sysctl -w vm.max_map_count=1048576
+#sudo sysctl -w vm.max_map_count=1048576
 
 #Citra Emu
 flatpak install -y flathub org.citra_emu.citra
